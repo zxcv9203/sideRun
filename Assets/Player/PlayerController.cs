@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +15,26 @@ public class PlayerController : MonoBehaviour
     bool goJump = false;            // 점프 개시 플래그
     bool onGround = false;          // 지면에 서 있는 플래그
     
+    // 애니메이션 처리
+    private Animator animator; // 애니메이터
+    public string stopAnime = "PlayerStop";
+    public string moveAnime = "PlayerMove";
+    public string jumpAnime = "PlayerJump";
+    public string goalAnime = "PlayerGoal";
+    public string deadAnime = "PlayerOver";
+    string nowAnime = "";
+    string oldAnime = "";
+    
+    
     // Start is called before the first frame update
     void Start()
     {
         // Rigidbody2D 가져오기
         rbody = this.GetComponent<Rigidbody2D>();
+        // Animator 가져오기
+        animator = GetComponent<Animator>();
+        nowAnime = stopAnime;
+        oldAnime = stopAnime;
     }
 
     // Update is called once per frame
@@ -74,8 +90,52 @@ public class PlayerController : MonoBehaviour
             goJump = false; // 점프 플래그 끄기
         }
 
+        if (onGround)
+        {
+            // 지면 위
+            if (axisH == 0)
+            {
+                nowAnime = stopAnime;
+            }
+            else
+            {
+                nowAnime = moveAnime;
+            }
+        }
+        else
+        {
+            // 공중
+            nowAnime = jumpAnime;
+        }
+
+        if (nowAnime != oldAnime)
+        {
+            oldAnime = nowAnime;
+            animator.Play(nowAnime); // 애니메이션 재생
+        }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Goal")
+        {
+            Goal();
+        }
+        else if (collision.gameObject.tag == "Dead")
+        {
+            GameOver();
+        }
+    }
+
+    public void Goal()
+    {
+        animator.Play(goalAnime);
+    }
+
+    public void GameOver()
+    {
+        animator.Play(deadAnime);
+    }
     public void Jump()
     {
         // 점프 플래그 켜기
