@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static string gameState = "playing"; // 게임 상태
+    
     Rigidbody2D rbody;  // Rigidbody2D형 변수
 
     float axisH = 0.0f;         // 입력
@@ -35,11 +37,16 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         nowAnime = stopAnime;
         oldAnime = stopAnime;
+        gameState = "playing";
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gameState != "playing")
+        {
+            return;
+        }
         // 수평방향으로의 입력 확인
         axisH = Input.GetAxisRaw("Horizontal");
         
@@ -66,6 +73,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (gameState != "playing")
+        {
+            return;
+        }
         // 착지 판정
         onGround = Physics2D.Linecast(
             transform.position,
@@ -130,11 +141,30 @@ public class PlayerController : MonoBehaviour
     public void Goal()
     {
         animator.Play(goalAnime);
+        gameState = "gameclear";
+        GameStop();
     }
 
     public void GameOver()
     {
         animator.Play(deadAnime);
+        gameState = "gameover";
+        GameStop();
+        
+        // 플레이어의 충돌 판정 비활성
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        
+        // 플레이어의 위로 튀어 오르게 하는 연출 추가
+        rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
+    }
+
+    void GameStop()
+    {
+        // Rigidbody2D 가져오기
+        Rigidbody2D rbody = GetComponent<Rigidbody2D>();
+        
+        // 속도를 0으로 하여 강제 정지
+        rbody.velocity = new Vector2(0, 0);
     }
     public void Jump()
     {
