@@ -10,6 +10,11 @@ public class CameraManager : MonoBehaviour
     public float bottomLimit = 0.0f;    // 아래 스크롤 제한
 
     public GameObject subScreen;
+
+    public bool isForceScrollX = false; // X축 강제 스크롤 플래그
+    public float forceScrollSpeedX = 0.5f; // 1초간 움직일 X의 거리
+    public bool isForceScrollY = false; // Y축 강제 스크롤 플래그
+    public float forceScrollSpeedY = 0.5f; // 1초간 움직일 Y의 거리
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +32,12 @@ public class CameraManager : MonoBehaviour
             float x = player.transform.position.x;
             float y = player.transform.position.y;
             float z = transform.position.z;
+
+            if (isForceScrollX)
+            {
+                // 가로 강제 스크롤
+                x = transform.position.x + (forceScrollSpeedX * Time.deltaTime);
+            }
             
             // 가로 방향 동기화 (양끝에 이동 제한 적용)
             if (x < leftLimit)
@@ -37,7 +48,12 @@ public class CameraManager : MonoBehaviour
             {
                 x = rightLimit;
             }
-            
+
+            if (isForceScrollY)
+            {
+                // 세로 상세 스크롤
+                y = transform.position.y + (forceScrollSpeedY * Time.deltaTime);
+            }
             // 세로 방향 동기화 (위아래에 이동 제한 적용)
             if (y < bottomLimit)
             {

@@ -391,6 +391,10 @@ MonoBehaviour:
   topLimit: 0
   bottomLimit: 0
   subScreen: {fileID: 2103992809}
+  isForceScrollX: 1
+  forceScrollSpeedX: 0.5
+  isForceScrollY: 0
+  forceScrollSpeedY: 0.5
 --- !u!1 &378489421
 GameObject:
   m_ObjectHideFlags: 0
