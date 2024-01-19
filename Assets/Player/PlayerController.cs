@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour
     public string deadAnime = "PlayerOver";
     string nowAnime = "";
     string oldAnime = "";
+
+    public int score = 0; // 점수
     
     
     // Start is called before the first frame update
@@ -128,13 +131,25 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Goal")
+        if (collision.gameObject.CompareTag("Goal"))
         {
             Goal();
         }
-        else if (collision.gameObject.tag == "Dead")
+        else if (collision.gameObject.CompareTag("Dead"))
         {
             GameOver();
+        }
+        else if (collision.gameObject.CompareTag("ScoreItem"))
+        {
+            // 점수 아이템
+            // ItemData 가져오기
+            ItemData item = collision.gameObject.GetComponent<ItemData>();
+            
+            // 점수 얻기
+            score = item.value;
+            
+            // 아이템 제거
+            Destroy(collision.gameObject);
         }
     }
 

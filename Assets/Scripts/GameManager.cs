@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     public GameObject timeText;
     TimeController timeCnt;
 
+    public GameObject scoreText;
+    public static int totalScore;
+    public int stageScore = 0;
+    
+
 
     Image titleImage; // 이미지를 표시하는 Image 컴포넌트
 
@@ -38,6 +43,9 @@ public class GameManager : MonoBehaviour
                 timeBar.SetActive(false);
             }
         }
+
+        UpdateScore();
+        
     }
 
     // Update is called once per frame
@@ -55,7 +63,13 @@ public class GameManager : MonoBehaviour
             if (timeCnt != null)
             {
                 timeCnt.isTimeOver = true; // 시간 카운트 중지
+                int time = (int)timeCnt.displayTime;
+                totalScore += time * 10;
             }
+
+            totalScore += stageScore;
+            stageScore = 0;
+            UpdateScore();
         }
         else if (PlayerController.gameState == "gameover")
         {
@@ -92,6 +106,13 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+
+            if (playerCnt.score != 0)
+            {
+                stageScore += playerCnt.score;
+                playerCnt.score = 0;
+                UpdateScore();
+            }
         }
         
     }
@@ -99,5 +120,12 @@ public class GameManager : MonoBehaviour
     void InactiveImage()
     {
         mainImage.SetActive(false);
+    }
+
+    void UpdateScore()
+    {
+        int score = stageScore + totalScore;
+        Debug.Log(score);
+        scoreText.GetComponent<TextMeshProUGUI>().text = score.ToString();
     }
 }

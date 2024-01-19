@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ItemData : MonoBehaviour
 {
+    public int value = 0;
+    
     // Start is called before the first frame update
     void Start()
     {
