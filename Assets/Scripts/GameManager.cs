@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     public GameObject scoreText;
     public static int totalScore;
     public int stageScore = 0;
+
+    public AudioClip meGameOver;    // 게임 오버
+    public AudioClip meGameClear;   // 게임 클리어
     
 
 
@@ -70,6 +73,13 @@ public class GameManager : MonoBehaviour
             totalScore += stageScore;
             stageScore = 0;
             UpdateScore();
+
+            AudioSource soundPlayer = GetComponent<AudioSource>();
+            if (soundPlayer != null)
+            {
+                soundPlayer.Stop();
+                soundPlayer.PlayOneShot(meGameClear);
+            }
         }
         else if (PlayerController.gameState == "gameover")
         {
@@ -83,6 +93,13 @@ public class GameManager : MonoBehaviour
             if (timeCnt != null)
             {
                 timeCnt.isTimeOver = true; // 시간 카운트 중지
+            }
+
+            AudioSource soundPlayer = GetComponent<AudioSource>();
+            if (soundPlayer != null)
+            {
+                soundPlayer.Stop();
+                soundPlayer.PlayOneShot(meGameOver);
             }
         }
         else if (PlayerController.gameState == "playing")
