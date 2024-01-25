@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;   // 착지할 수 있는 레이어
     bool goJump = false;            // 점프 개시 플래그
     bool onGround = false;          // 지면에 서 있는 플래그
+
+    bool isMoving = false;
     
     // 애니메이션 처리
     private Animator animator; // 애니메이터
@@ -50,8 +52,12 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        // 수평방향으로의 입력 확인
-        axisH = Input.GetAxisRaw("Horizontal");
+
+        if (isMoving == false)
+        {
+            // 수평방향으로의 입력 확인
+            axisH = Input.GetAxisRaw("Horizontal");
+        }
         
         // 방향 조절
         if (axisH > 0.0f)
@@ -186,5 +192,18 @@ public class PlayerController : MonoBehaviour
         // 점프 플래그 켜기
         goJump = true;
         Debug.Log("점프 버튼 눌림");
+    }
+
+    public void SetAxis(float h, float v)
+    {
+        axisH = h;
+        if (axisH == 0)
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
     }
 }

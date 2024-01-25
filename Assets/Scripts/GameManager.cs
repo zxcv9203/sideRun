@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     Image titleImage; // 이미지를 표시하는 Image 컴포넌트
 
+    public GameObject inputUI;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,6 +83,7 @@ public class GameManager : MonoBehaviour
                 soundPlayer.Stop();
                 soundPlayer.PlayOneShot(meGameClear);
             }
+            inputUI.SetActive(false);
         }
         else if (PlayerController.gameState == "gameover")
         {
@@ -101,6 +105,7 @@ public class GameManager : MonoBehaviour
                 soundPlayer.Stop();
                 soundPlayer.PlayOneShot(meGameOver);
             }
+            inputUI.SetActive(false);
         }
         else if (PlayerController.gameState == "playing")
         {
@@ -144,5 +149,12 @@ public class GameManager : MonoBehaviour
         int score = stageScore + totalScore;
         Debug.Log(score);
         scoreText.GetComponent<TextMeshProUGUI>().text = score.ToString();
+    }
+
+    public void Jump()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        PlayerController playerCnt = player.GetComponent<PlayerController>();
+        playerCnt.Jump();
     }
 }
